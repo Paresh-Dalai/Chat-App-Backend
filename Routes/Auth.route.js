@@ -2,6 +2,7 @@
 
 const express = require("express");
 const AuthController = require("./../Controller/Auth.controller");
+const verifySignup = require("./../Middlewares/checkForDuplicates");
 const AuthRouter = express.Router();
 const expressApp = express();
 
@@ -14,7 +15,7 @@ expressApp.use(function (req, res, next) {
     next();
   });
 
-AuthRouter.post("/signUp" , AuthController.createUser);
+AuthRouter.post("/signUp" , [verifySignup.checkDuplicateUserName , verifySignup.checkMailIdExisted], AuthController.createUser);
 AuthRouter.post("/signIn" , AuthController.signIn);
 
 module.exports = AuthRouter;
